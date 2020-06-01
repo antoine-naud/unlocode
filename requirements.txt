@@ -1,0 +1,6 @@
+Django>=2.2.13
+psycopg2==2.8.5
+django-multiselectfield==0.1.12
+djangorestframework==3.11.0
+django-filter==2.2.0
+requests==2.23.0
