@@ -15,7 +15,7 @@ cd unlocode
 docker-compose build
 docker-compose up -d
 ```
-Ensure that django server started by checking logs at:
+The `web` container will perform initial migration, then it will execute initial import of data to `Unlocode` table in the database (the import takes about 2 minutes). After importing data, the Django server is started. You can check the logs at:
 ```
 docker-compose logs web
 ...
@@ -182,11 +182,6 @@ GET localhost:8000/api/?namewodiacritics=Warszawa
 }
 ```
 ## 3. Check once a day if LOCODE database was updated
-### 3.1. Create a `CRON` job run every day
-The above custom Django command must be executed once a day using a CRON job:
-```bash
-0 2 * * * /code/djangoprj/manage.py create_install_fixture djangoprj/unlocode/fixtures http://www.unece.org/fileadmin/DAM/cefact/locode/loc192csv.zip
-```
+A `celery` task is set to download the resource from `http://www.unece.org/fileadmin/DAM/cefact/locode/loc192csv.zip` and install a fixture to the `Unlocode` table of the database automatically every day at 2AM.
 
-### 3.2. Execute the above custom command asynchronously in a `Celery` task
-TODO
+TODO: Perform import only in case when the `last-modified` attribute in the header of the request's response is newer than the date of the latest import.

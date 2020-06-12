@@ -3,16 +3,17 @@ version: '3.7'
 services:
   web:
     build: .
-    command: python djangoprj/manage.py runserver 0.0.0.0:8000
+    command: sh -c "python /code/manage.py makemigrations --noinput && python /code/manage.py migrate --noinput && python /code/manage.py create_install_fixture unlocode/fixtures http://www.unece.org/fileadmin/DAM/cefact/locode/loc192csv.zip && python /code/manage.py runserver 0.0.0.0:8000"
     volumes:
       - .:/code
     ports:
       - 8000:8000
       - 8080:80
     env_file:
-      - ./djangoprj/.env.dev
+      - .env.dev
     depends_on:
       - db
+      - redis
   db:
     image: postgres:12.0-alpine
     volumes:
@@ -21,6 +22,28 @@ services:
       - POSTGRES_DB=unlocode
       - POSTGRES_USER=locode
       - POSTGRES_PASSWORD=locode
+  celery:
+    build: .
+    command: celery worker -A djangoprj -l info
+    volumes:
+      - .:/code
+    env_file:
+      - .env.dev
+    depends_on:
+      - web
+      - redis
+  celery-beat:
+    build: .
+    command: celery beat -A djangoprj -l info
+    volumes:
+      - .:/code
+    env_file:
+      - .env.dev
+    depends_on:
+      - web
+      - redis
+  redis:
+    image: redis:alpine
 
 volumes:
   postgres_data:
