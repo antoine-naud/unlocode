@@ -67,8 +67,7 @@ class Command(BaseCommand):
 
     def create_install_fixture(self, tmp_dir, fixt_dir, csv_url):
         if not os.path.exists(fixt_dir):
-            self.stdout.write(f'Folder for fixtures does not exist: {fixt_dir}')
-            return
+            os.makedirs(fixt_dir)
         csv_filenames = self.download_and_extract(csv_url, tmp_dir)
         if not csv_filenames:
             return

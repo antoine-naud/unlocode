@@ -14,7 +14,7 @@ app.autodiscover_tasks()
 
 app.conf.beat_schedule = {
     'import-daily-at-2am': {
-        'task': 'create_fixture_install',  
+        'task': 'create_fixture_install',
         'schedule': crontab(hour=2, minute=0)
     },
 }
