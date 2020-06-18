@@ -24,7 +24,7 @@ services:
       - POSTGRES_PASSWORD=locode
   celery:
     build: .
-    command: celery worker -A djangoprj -l info
+    command: ['celery', 'worker', '-A', 'djangoprj', '-l', 'INFO']
     volumes:
       - .:/code
     env_file:
@@ -34,7 +34,7 @@ services:
       - redis
   celery-beat:
     build: .
-    command: celery beat -A djangoprj -l info
+    command: ['celery', 'beat', '-A', 'djangoprj', '-l', 'INFO']
     volumes:
       - .:/code
     env_file:
