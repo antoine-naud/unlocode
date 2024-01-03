@@ -1,4 +1,4 @@
-Django>=2.2.13
+Django==2.2.13
 psycopg2==2.8.5
 django-multiselectfield==0.1.12
 djangorestframework==3.11.0

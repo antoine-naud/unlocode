@@ -18,8 +18,8 @@ cd unlocode
 
 ### 1.3. Build the images and spin up the containers
 ```
-docker-compose build
-docker-compose up -d
+docker compose build
+docker compose up -d
 ```
 Below five containers should be up and running:
 ```bash
